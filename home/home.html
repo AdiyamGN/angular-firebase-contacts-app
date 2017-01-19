@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Home Page</title>
+</head>
+<body ng-controller="homeCtrl">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="top-header">
+        <div class="navbar-header">
+          <a href="#/home" class="navbar-brand">Contacts</a>
+        </div>
+      </div>
+
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#/">{{username}}</a></li>
+            <!-- <li><a href="#/addContact">Add Contact</a></li> -->
+            <li ng-click="logout()"><a href="#/login">Log out</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->  
+    </div>
+  </nav>
+
+	<div class="col-md-12">
+		
+		<form class="form-inline well well-sm">
+			<span><i class="fa fa-search" aria-hidden="true"></i></span>
+			<div class="form-group">
+				<input type="text"
+								class="form-control"
+								id="name"
+								name="seaching" 
+								ng-model="search.name"
+								placeholder="Search Name...."
+					/>
+			</div>
+
+		</form>
+
+
+		<table class="table table-bordered">
+			<tr>
+				<th class="col-1">User</th>
+				<th class="col-2">Name</th>
+				<th class="col-3">Email</th>
+				<th class="col-4">Birthday</th>
+			</tr>
+
+			<tr ng-repeat="contact in filteredContacts = (contacts | filter: search | orderBy: order | limitTo: displayLimit)"
+					data-target="#editModal">
+				<td>
+					<button type="submit" class="btn btn-sm btn-primary" data-target="#editModal" data-toggle="modal" 
+							ng-click="editContact(contact.$id)">Edit Contact</button>
+				</td>
+				<td>{{contact.name}}</td>
+				<td>{{contact.email}}</td>
+				<td>{{contact.birthdate}}</td>
+			</tr>
+
+		</table>
+
+		<div ng-show="filteredContacts.length == 0">
+			<div class="alert alert-info">
+					<p class="text-center">No result found for the search term '{{ search.name }}'</p>
+			</div>
+		</div>
+
+	</div>
+
+
+<!-- Edit Contact -->
+	<div class="container">
+		<div id="editModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3>Edit Contact</h3>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal" ng-submit="createPost()" name="postForm" novalidate >
+
+							<div class="form-group" ng-class="{'has-error': postForm.name.$error.ng-minlength && postForm.name.$touched}">
+								<label class="col-sm-2 control-label" >Name</label >
+								<div class="col-sm-10" >
+									<input type="text"
+									       class="form-control"
+									       name="name"
+									       ng-model="editContactData.name"
+									       required />
+								</div >
+							</div >
+							<div class="form-group" ng-class="{'has-error': postForm.email.$invalid && postForm.email.$touched}">
+								<label class="col-sm-2 control-label" >Email</label >
+								<div class="col-sm-10" >
+									<input type="email"
+									       name="email"
+									       class="form-control"
+									       ng-model="editContactData.email"
+									       required />
+								</div >
+							</div >
+							<div class="form-group" >
+								<label class="col-sm-2 control-label" >Sex</label >
+								<div class="col-sm-10" >
+
+									<select name="sex"
+									        class="form-control"
+									        ng-model="editContactData.sex"
+									        id="" >
+										<option value="M" >Male</option >
+										<option value="F" >Female</option >
+									</select >
+								</div >
+							</div >
+							<div class="form-group" >
+								<label class="col-sm-2 control-label" >Birthday</label >
+								<div class="col-sm-10" >
+									<input type="text"
+									       name="bday"
+									       class="form-control"
+									       ng-model="editContactData.birthdate" />
+								</div >
+							</div >
+							<div class="form-group" >
+								<label class="col-sm-2 control-label" >Phone</label >
+								<div class="col-sm-10" >
+									<input type="tel"
+									       name="phone"
+									       class="form-control"
+									       ng-model="editContactData.phonenumber" />
+								</div >
+							</div >
+							<div class="form-group" >
+								<label class="col-sm-2 control-label" >Address</label >
+								<div class="col-sm-10" >
+									<input type="text"
+									       name="address"
+									       class="form-control"
+									       ng-model="editContactData.address" />
+								</div >
+							</div >
+
+							<div class="form-group" >
+								<label class="col-sm-2 control-label" >City</label >
+								<div class="col-sm-10" >
+									<input type="text"
+									       name="city"
+									       class="form-control"
+									       ng-model="editContactData.city" />
+								</div >
+
+							</div >
+							<div class="form-group" >
+								<label class="col-sm-2 control-label" >Country</label >
+								<div class="col-sm-10" >
+									<input type="text"
+									       name="country"
+									       class="form-control"
+									       ng-model="editContactData.country" />
+								</div >
+
+							</div >
+							<div class="form-group" >
+								<div class="buttons" >
+									<button class="btn btn-primary btn-block"
+									        type="submit" ng-click="updateContact(editContactData.$id)">Update Contact
+									</button >
+								</div >
+							</div>
+
+						</form >
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
